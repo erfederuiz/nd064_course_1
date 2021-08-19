@@ -1,5 +1,6 @@
 import sqlite3
 import global_values
+import logging
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
@@ -42,7 +43,17 @@ def get_PostsCount():
 
 def set_PostsCount(count):
     global_values.postsCount = count 
+ 
+# Customize logging
+def customize_logger(objLogger, custom_format):
+    del objLogger.handlers[:]
     
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(custom_format)
+
+    objLogger.addHandler(console_handler)
+    app.logger.setLevel(logging.DEBUG)
 
 # Define the Flask application
 app = Flask(__name__)
@@ -114,4 +125,15 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
+   #customize_app_logging(app) 
+   #customize_web_logging()
+
+   appLogger = app.logger
+   appFormat = logging.Formatter('%(levelname)s:%(name)s:%(asctime)s%(message)s', datefmt='%d/%m/%Y, %H:%M:%S, ')
+   customize_logger(appLogger, appFormat) 
+
+   wsLogger = logging.getLogger('werkzeug')
+   wsFormat = logging.Formatter('%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y, %H:%M:%S, ') 
+   customize_logger(wsLogger, wsFormat) 
+
    app.run(host='0.0.0.0', port='3111', debug=True)
