@@ -4,7 +4,6 @@ metadata:
   name: techtrends-staging
 spec:
   destination:
-    name: ''
     namespace: argocd
     server: 'https://kubernetes.default.svc'
   source:
