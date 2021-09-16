@@ -114,7 +114,14 @@ def create():
 # Define the healthz endpoint
 @app.route('/healthz')
 def healthz():
-    return jsonify(result='OK - healthy'), 200
+    
+    try:
+        posts = get_allPosts()
+    except:
+        return jsonify(result='ERROR - unhealthy'), 500
+    else:
+        return jsonify(result='OK - healthy'), 200
+
 
 # Define the metrics endpoint
 @app.route('/metrics')
