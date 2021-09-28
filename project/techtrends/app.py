@@ -1,6 +1,7 @@
 import sqlite3
 import global_values
 import logging
+import sys
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
@@ -48,11 +49,16 @@ def set_PostsCount(count):
 def customize_logger(objLogger, custom_format):
     del objLogger.handlers[:]
     
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
-    console_handler.setFormatter(custom_format)
+    handler1_stdout = logging.StreamHandler(sys.stdout)
+    handler1_stdout.setLevel(logging.DEBUG)
+    handler1_stdout.setFormatter(custom_format)
 
-    objLogger.addHandler(console_handler)
+    handler2_stderr = logging.StreamHandler(sys.stderr)
+    handler2_stderr.setLevel(logging.ERROR)
+    handler2_stderr.setFormatter(custom_format)
+    
+    objLogger.addHandler(handler1_stdout)
+    objLogger.addHandler(handler2_stderr)
     app.logger.setLevel(logging.DEBUG)
 
 # Define the Flask application
