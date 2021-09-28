@@ -12,7 +12,7 @@ image:
   tag: latest
   pullPolicy: Always
 
-replicaCount: 3
+replicaCount: 5
 
 resources:
   requests:
